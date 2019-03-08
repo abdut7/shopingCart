@@ -1,3 +1,7 @@
+
+
+
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -29,6 +33,31 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+
+<!--//header above-->
+
+
+
+{{# each products}}
+    <div class="row">
+
+        {{#each this}}
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src="{{this.imagepath}}" alt="...">
+                     <div class="caption">
+                        <h3>{{this.tittle}}</h3>
+                        <div>{{this.price}}</div>
+                        <p>{{this.description}}</p>
+                        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                </div>
+            </div>
+
+        {{/each}}
+
+    </div>
+{{/each}}
+
+
 
