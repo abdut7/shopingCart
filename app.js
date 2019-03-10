@@ -5,16 +5,22 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose=require('mongoose');
 var hbs=require('hbs');
+var session=require('express-session')
+var passport=require('passport')
+var flash=require('connect-flash')
+var bodyParser = require('body-parser');
+var validator=require('express-validator')
+
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var usersRouter = require('./routes/users');
 
 
 var app = express();
 //mongoos connection
 
 mongoose.connect('mongodb://localhost:27017/shoping',{useNewUrlParser: true})
-
+require('./config/passport')
 
 let db=mongoose.connection
 db.on('error',()=>{
@@ -31,13 +37,20 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 //hbs.registerPartial(path.join(__dirname,'/views/partials'));
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(validator())
+app.use(cookieParser());
+app.use(session({secret:'mysupersecret',resave:false,saveUninitialized:false}))
+app.use(flash())
+
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
